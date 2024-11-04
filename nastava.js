@@ -117,8 +117,8 @@ export class Nastava{
         divBTNhero.classList.add("buttons");
 
         let nizBtnHeroClass = ["button zakazi-odmah", "button kontaktiraj-nas"];
-        let nizBtnHero = ["Zakaži odmah", "Kontaktiraj nas"];
-        let nizBtnHeroLinkovi = ["https://www.youtube.com/watch?v=dQw4w9WgXcQ", "https://www.youtube.com/watch?v=dQw4w9WgXcQ"];
+        let nizBtnHero = ["Naša ponuda", "Kontaktiraj nas"];
+        let nizBtnHeroLinkovi = ["#usluge", "#kontakt"]; 
         
         nizBtnHeroClass.forEach((el, index)=>{
             let btnHero = document.createElement('a');
@@ -186,7 +186,7 @@ export class Nastava{
         aboutDetails.appendChild(socialLinks);
 
         let nizSocKlasa = ["fa-facebook", "fa-instagram", "fa-x-twitter"];
-        let nizLinkovaSoc = ["https://www.facebook.com/?locale=sr_RS", "https://www.instagram.com/", "https://x.com/"]
+        let nizLinkovaSoc = ["https://www.youtube.com/watch?v=dQw4w9WgXcQ", "https://www.instagram.com/", "https://x.com/"]
         let linkSoc;
         let socSlika;
         nizSocKlasa.forEach((el, indeks)=>{
@@ -436,17 +436,26 @@ export class Nastava{
         });
         
         let kontaktForma = document.createElement("form");
-        kontaktForma.action = "#";
+        kontaktForma.method = "POST";
+        kontaktForma.id = "form";
         kontaktForma.classList.add("contact-form");
         sectionContent.appendChild(kontaktForma);
-        
+
+        let hiddenInpit = document.createElement("input");
+        hiddenInpit.name = "access_key";
+        hiddenInpit.type = "hidden";
+        hiddenInpit.value = "5cce7adc-cf77-4ae0-b263-08d321743a59";
+        kontaktForma.appendChild(hiddenInpit);
+
         let inputPolje;
         let nizInputa = ['text', 'email'];
+        let nizNameInputa = ["name", "email"]
         let nizPlaceholdera = ['Vaše ime', 'Vaš mejl'];
         nizInputa.forEach((el, i)=>{
             inputPolje = document.createElement("input");
             inputPolje.classList.add("form-input");
             inputPolje.type = el;
+            inputPolje.name = nizNameInputa[i];
             inputPolje.required = true;
             inputPolje.placeholder = nizPlaceholdera[i];
             kontaktForma.appendChild(inputPolje);
@@ -455,6 +464,7 @@ export class Nastava{
         let textArea = document.createElement("textarea");
         textArea.classList.add("form-input");
         textArea.placeholder = "Vaša poruka";
+        textArea.name = "message";
         textArea.required = true;
         kontaktForma.appendChild(textArea);
 
@@ -462,6 +472,53 @@ export class Nastava{
         btnPosalji.classList.add("submit-button");
         btnPosalji.innerHTML = 'Pošalji';
         kontaktForma.appendChild(btnPosalji);
+
+        let resultDiv = document.createElement('div');
+        resultDiv.id = "result";
+        kontaktForma.appendChild(resultDiv);
+
+
+        //---------------------------------------------------web3forms
+        const form = document.getElementById('form');
+        const result = document.getElementById('result');
+
+        form.addEventListener('submit', function(e) {
+            const formData = new FormData(form);
+            e.preventDefault();
+
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            result.innerHTML = "Please wait..."
+
+            fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: json
+                })
+                .then(async (response) => {
+                    let json = await response.json();
+                    if (response.status == 200) {
+                        result.innerHTML = json.message;
+                    } else {
+                        console.log(response);
+                        result.innerHTML = json.message;
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                    result.innerHTML = "Something went wrong!";
+                })
+                .then(function() {
+                    form.reset();
+                    setTimeout(() => {
+                        result.style.display = "none";
+                    }, 3000);
+                });
+        });
 
 
     }
