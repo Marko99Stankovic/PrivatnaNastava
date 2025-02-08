@@ -61,7 +61,6 @@ export class Nastava{
 
         const navLinks = document.querySelectorAll(".nav-menu .navLink");
         const menuOpenButton = document.querySelector("#menu-open-button");
-
         const menuCloseButton = document.querySelector("#menu-close-button");
 
         menuOpenButton.addEventListener("click", () => {
@@ -75,43 +74,49 @@ export class Nastava{
             });
         });
 
-        menuCloseButton.addEventListener("click", () => menuOpenButton.click
-        ());
+        menuCloseButton.addEventListener("click", () => menuOpenButton.click());
 
 
     }
     crtajHeroSekciju(host){
-        let mainDiv = document.createElement("main");
-        mainDiv.classList.add("mainDiv");
-        mainDiv.id = "hero";
-        host.appendChild(mainDiv);
 
-        let heroSection = document.createElement("section");
-        heroSection.classList.add("hero-section");
-        mainDiv.appendChild(heroSection);
+        let nizElemenata = ["main", "section", "div", "div", "h2", "h3", "p"];
+        let nizKlasaElemenata = ["mainDiv", "hero-section", "section-content", "hero-details", "title", "subtitle", "description"];
+        let nizSadrzajaElemenata = ["Učimo Zajedno", "Svaki Problem Ima Rešenje!", `Muče vas matematika, informatika ili fizika? Ne brinite, mi smo tu da vam pomognemo! Pronađite privatnog predavača koji će vam objasniti sve što vam nije jasno i pomoći vam da poboljšate svoje znanje i ocene. Zakazivanje časova je brzo i lako – izaberite predmet i vreme koje vama odgovara.`];
+        let element;
+        let mainDiv;
 
-        let sectionContent = document.createElement("div");
-        sectionContent.classList.add("section-content");
-        heroSection.appendChild(sectionContent);
-        
-        let heroDetails = document.createElement("div");
-        heroDetails.classList.add("hero-details");
-        sectionContent.appendChild(heroDetails);
+        nizElemenata.forEach((el, i)=>{
+            element = document.createElement(el);
+            element.classList.add(nizKlasaElemenata[i]);
 
-        let naslov = document.createElement("h2");
-        naslov.classList.add("title");
-        naslov.innerHTML = "Učimo Zajedno";
-        heroDetails.appendChild(naslov);
-
-        let podnaslov = document.createElement("h3");
-        podnaslov.classList.add("subtitle");
-        podnaslov.innerHTML = "Svaki Problem Ima Rešenje!"
-        heroDetails.appendChild(podnaslov);
-
-        let opis = document.createElement("p");
-        opis.classList.add("description");
-        opis.innerHTML = `Muče vas matematika, informatika ili fizika? Ne brinite, mi smo tu da vam pomognemo! Pronađite privatnog predavača koji će vam objasniti sve što vam nije jasno i pomoći vam da poboljšate svoje znanje i ocene. Zakazivanje časova je brzo i lako – izaberite predmet i vreme koje vama odgovara.`;
-        heroDetails.appendChild(opis);
+            if(el === "main"){
+                element.id = "hero";
+                mainDiv = element;
+                host.appendChild(element);
+            }
+            else if(nizKlasaElemenata[i] === "hero-section"){    
+                document.querySelector(".mainDiv").appendChild(element);
+            }
+            else if(nizKlasaElemenata[i] === "section-content"){
+                document.querySelector(".hero-section").appendChild(element);
+            }
+            else if(nizKlasaElemenata[i] === "hero-details"){    
+                document.querySelector(".section-content" && "div" ).appendChild(element);         
+            }
+            else if(nizKlasaElemenata[i] === "title"){
+                element.innerHTML = nizSadrzajaElemenata[0];
+                document.querySelector(".hero-details").appendChild(element);
+            }
+            else if(nizKlasaElemenata[i] === "subtitle"){
+                element.innerHTML = nizSadrzajaElemenata[1];
+                document.querySelector(".hero-details").appendChild(element);
+            }
+            else if(nizKlasaElemenata[i] === "description"){
+                element.innerHTML = nizSadrzajaElemenata[2];
+                document.querySelector(".hero-details").appendChild(element);
+            }
+        });
 
         let divBTNhero = document.createElement("div");
         divBTNhero.classList.add("buttons");
@@ -128,11 +133,11 @@ export class Nastava{
             btnHero.href = nizBtnHeroLinkovi[index];
             divBTNhero.appendChild(btnHero);
         });
-        heroDetails.appendChild(divBTNhero);
+        document.querySelector(".hero-details").appendChild(divBTNhero);
 
         let imgWrapper = document.createElement("div");
         imgWrapper.className = "hero-image-wrapper";
-        sectionContent.appendChild(imgWrapper);
+        document.querySelector(".section-content" && "div").appendChild(imgWrapper);
 
         let heroIMG = document.createElement("img");
         heroIMG.classList.add("hero-image");
